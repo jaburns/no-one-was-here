@@ -1,0 +1,21 @@
+{
+  "name": "no-one-was-here",
+  "private": true,
+  "scripts": {
+    "start": "node test-server.js",
+    "build": "webpack",
+    "watch": "webpack --watch"
+  },
+  "devDependencies": {
+    "@types/lodash": "4.14.149",
+    "awesome-typescript-loader": "5.2.1",
+    "express": "4.17.1",
+    "gl-matrix": "3.2.1",
+    "lodash": "4.17.15",
+    "shelljs": "0.8.3",
+    "ts-essentials": "6.0.2",
+    "typescript": "3.8.3",
+    "webpack": "4.41.6",
+    "webpack-cli": "3.3.11"
+  }
+}
