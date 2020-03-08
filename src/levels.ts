@@ -4,7 +4,15 @@ import { Rect } from "rect";
 export type GroundChunk = (t: number) => Rect;
 
 export type Level = {
+    maxX: number,
     grounds: GroundChunk[],
+
+    caves?: vec2,
+    title?: vec2,
+    friend?: vec2,
+
+    dragon?: vec2,
+    artifact?: vec2,
 };
 
 const basic = (x: number, y: number, w: number, h: number): GroundChunk => {
@@ -27,6 +35,7 @@ const forestLeftRight = (x: number, y: number): GroundChunk => {
 };
 
 const HubLevel = {
+    maxX: 2994 + 1344 - 5,
     grounds: [
         basic(  0, -73, 574, 171),
         basic(746, -73, 574, 171),
@@ -34,7 +43,15 @@ const HubLevel = {
         basic(1802, -78, 574, 171),
         forestLeftRight(2493, 100),
         basic(2994, -78, 1344, 171),
-    ]
+    ],
+
+    caves: vec2.fromValues(3163, -78-225),
+    title: vec2.fromValues(165, -440),
+    friend: vec2.fromValues(55, -175),
+};
+
+const Level1 = {
+
 };
 
 export const LEVELS = [

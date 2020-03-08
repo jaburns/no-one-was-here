@@ -3,11 +3,15 @@ import { vec2 } from "gl-matrix";
 import { InputState } from "index";
 import { LEVELS } from "levels";
 import { Rect } from "rect";
+import { getCamX } from "render";
 
 export type GameState = {
     level: number,
     player: PlayerState,
     frame: number,
+    cavesDone: boolean[],
+    rain: vec2[],
+    rainAngle: number,
 };
 
 type PlayerState = {
@@ -185,6 +189,15 @@ const PlayerState = {
                 self.vel[0] = 0;
             }
         });
+
+        if (lev.caves && self.pos[0] < 20) {
+            self.pos[0] = 20;
+            self.vel[0] = 0;
+        }
+        if (self.pos[0] > lev.maxX - 20) {
+            self.pos[0] = lev.maxX - 20;
+            self.vel[0] = 0;
+        }
     },
 };
 
@@ -193,6 +206,9 @@ export const GameState = {
         level: 0,
         player: PlayerState.create(),
         frame: 1,
+        cavesDone: [false,false,false,false,false],
+        rain: Array(200).fill(0).map(_ => vec2.fromValues(800*Math.random(), 480*Math.random())),
+        rainAngle: Math.PI / 16,
     }),
 
     clone: (self: GameState): GameState => GameState.copy(GameState.create(), self),
@@ -203,11 +219,43 @@ export const GameState = {
         out.level = to.level;
         PlayerState.lerp(out.player, from.player, to.player, t);
         out.frame = numberLerp(0, from.frame, to.frame, t);
+        out.cavesDone.forEach((_, i) => out.cavesDone[i] = to.cavesDone[i]);
+        out.rain.forEach((_, i) => {
+            if (from.rain[i][1] > to.rain[i][1]) {
+                vec2.copy(out.rain[i], to.rain[i]);
+            } else {
+                vec2.lerp(out.rain[i], from.rain[i], to.rain[i], t);
+            }
+        });
         return out;
     },
 
     step: (self: GameState, input: Const<InputState>) => {
         self.frame++;
+
+        const lastCamX = getCamX(self.level, self.player.pos[0]);
+
         PlayerState.step(self.player, self.frame, self.level, input);
+
+        const newCamX = getCamX(self.level, self.player.pos[0]);
+        const dx = newCamX - lastCamX;
+
+        // Update rain
+        {
+            const SPEED = 15;
+
+            self.rainAngle = dx/40 + Math.PI/16;
+
+            const sin = Math.sin(self.rainAngle + Math.PI/2);
+            const cos = Math.cos(self.rainAngle + Math.PI/2);
+
+            self.rain.forEach(drop => {
+                drop[0] += SPEED * cos - dx;
+                drop[1] += SPEED * sin;
+                drop[0] %= 800;
+                if (drop[0] < 0) drop[0] += 800;
+                drop[1] %= 480;
+            });
+        }
     },
 };

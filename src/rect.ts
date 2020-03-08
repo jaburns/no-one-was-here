@@ -16,15 +16,6 @@ export const Rect = {
         ymax: 0,
     }),
 
-    fromValues: (xmin: number, ymin: number, xmax: number, ymax: number): Rect => {
-        const result = Rect.create();
-        result.xmin = xmin;
-        result.xmax = xmax;
-        result.ymin = ymin;
-        result.ymax = ymax;
-        return result;
-    },
-
     fromXYWH: (x: number, y: number, w: number, h: number): Rect => {
         const result = Rect.create();
         result.xmin = x;
@@ -38,44 +29,12 @@ export const Rect = {
 
     copy: (self: Rect, from: Rect): Rect => Rect.lerp(self, from, from, 0),
 
-    clear: (self: Rect): Rect => {
-        self.xmin = 0;
-        self.xmax = 0;
-        self.ymin = 0;
-        self.ymax = 0;
-        return self;
-    },
-
     lerp: (out: Rect, from: Rect, to: Rect, t: number): Rect => {
         out.xmin = numberLerp(0, from.xmin, to.xmin, t);
         out.xmax = numberLerp(0, from.xmax, to.xmax, t);
         out.ymin = numberLerp(0, from.ymin, to.ymin, t);
         out.ymax = numberLerp(0, from.ymax, to.ymax, t);
         return out;
-    },
-
-    setToPoint: (self: Rect, p: vec2): Rect => {
-        self.xmin = p[0];
-        self.xmax = p[0];
-        self.ymin = p[1];
-        self.ymax = p[1];
-        return self;
-    },
-
-    expandToContainPoint: (self: Rect, p: vec2): Rect => {
-        if (p[0] < self.xmin) self.xmin = p[0];
-        if (p[1] < self.ymin) self.ymin = p[1];
-        if (p[0] > self.xmax) self.xmax = p[0];
-        if (p[1] > self.ymax) self.ymax = p[1];
-        return self;
-    },
-
-    expandByRadius: (self: Rect, r: number): Rect => {
-        self.xmin -= r;
-        self.xmax += r;
-        self.ymin -= r;
-        self.ymax += r;
-        return self;
     },
 
     intersects: (self: Rect, next: Rect): boolean =>

@@ -8,8 +8,10 @@ const loadImage = (
     });
 
 type Images = {
+    caves: HTMLImageElement,
     forest0001: HTMLImageElement,
     forest0002: HTMLImageElement,
+    friend: HTMLImageElement,
     hero0001: HTMLImageElement,
     hero0002: HTMLImageElement,
     hero0003: HTMLImageElement,
@@ -23,6 +25,8 @@ type Images = {
     hero0011: HTMLImageElement,
     hero0012: HTMLImageElement,
     hero0013: HTMLImageElement,
+    rain: HTMLImageElement,
+    title: HTMLImageElement,
 };
 
 export type Resources = {
@@ -31,8 +35,10 @@ export type Resources = {
 
 export const loadResources = (): Promise<Resources> => new Promise(resolve => {
     Promise.all([
+        loadImage('res/caves.png'),
         loadImage('res/forest0001.png'),
         loadImage('res/forest0002.png'),
+        loadImage('res/friend.png'),
         loadImage('res/hero0001.png'),
         loadImage('res/hero0002.png'),
         loadImage('res/hero0003.png'),
@@ -46,10 +52,14 @@ export const loadResources = (): Promise<Resources> => new Promise(resolve => {
         loadImage('res/hero0011.png'),
         loadImage('res/hero0012.png'),
         loadImage('res/hero0013.png'),
+        loadImage('res/rain.png'),
+        loadImage('res/title.png'),
     ])
     .then(([
+        caves,
         forest0001,
         forest0002,
+        friend,
         hero0001,
         hero0002,
         hero0003,
@@ -63,11 +73,15 @@ export const loadResources = (): Promise<Resources> => new Promise(resolve => {
         hero0011,
         hero0012,
         hero0013,
+        rain,
+        title,
     ]) => {
         resolve({
             images: {
+                caves,
                 forest0001,
                 forest0002,
+                friend,
                 hero0001,
                 hero0002,
                 hero0003,
@@ -81,6 +95,8 @@ export const loadResources = (): Promise<Resources> => new Promise(resolve => {
                 hero0011,
                 hero0012,
                 hero0013,
+                rain,
+                title,
             }
         });
     });
