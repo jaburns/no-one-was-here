@@ -1,6 +1,7 @@
 import { Renderer } from "render";
 import { GameState } from "state";
 import { loadResources } from "resources";
+import { fadeToMenuMusic } from "audio";
 
 const MAX_CATCH_UP_DELAY_SECONDS = 5;
 const FRAME_SECONDS = 0.033;
@@ -25,6 +26,8 @@ export type InputState = {
 const keys: any = {};
 document.onkeydown = e => keys[e.keyCode] = true; // and preventDefault
 document.onkeyup   = e => delete keys[e.keyCode];
+
+fadeToMenuMusic();
 
 loadResources().then(res => {
     const frame = () => {
