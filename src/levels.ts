@@ -37,7 +37,7 @@ const forestLeftRight = (x: number, y: number): GroundChunk => {
 const HubLevel = {
     maxX: 2994 + 1344 - 5,
     grounds: [
-        basic(  0, -73, 574, 171),
+        basic(-10, -73, 574, 171),
         basic(746, -73, 574, 171),
         basic(1300, -184, 320, 257),
         basic(1802, -78, 574, 171),
@@ -51,9 +51,15 @@ const HubLevel = {
 };
 
 const Level1 = {
-
+    maxX: 1724,
+    grounds: [
+        basic(-218, -73, 860, 171),
+        basic(494, -211, 362, 49),
+        basic(714, -73, 1394, 171),
+    ],
 };
 
-export const LEVELS = [
-    HubLevel
+export const LEVELS: Level[] = [
+    HubLevel,
+    Level1,
 ];

@@ -70,12 +70,23 @@ export class Renderer {
 
         ctx.clearRect(0,0,800,480);
 
-        ctx.drawImage(res.images.forest0001, -(camX/4%820), 45);
-        ctx.drawImage(res.images.forest0001, 820-(camX/4%820), 45);
-        ctx.drawImage(res.images.forest0002, -(camX/2%820), 45);
-        ctx.drawImage(res.images.forest0002, 820-(camX/2%820), 45);
+        if (state.level === 0) {
+            ctx.fillStyle = '#424282';
+            ctx.fillRect(0, 0, 800, 480);
+            ctx.drawImage(res.images.forest0001, -(camX/4%820), 45);
+            ctx.drawImage(res.images.forest0001, 820-(camX/4%820), 45);
+            ctx.drawImage(res.images.forest0002, -(camX/2%820), 45);
+            ctx.drawImage(res.images.forest0002, 820-(camX/2%820), 45);
 
-        this.rain(res, state.rainAngle, state.rain);
+            this.rain(res, state.rainAngle, state.rain);
+        } else {
+            ctx.fillStyle = '#6E364D';
+            ctx.fillRect(0, 0, 800, 480);
+            ctx.drawImage(res.images.cave0001, -(camX/4%820), 0);
+            ctx.drawImage(res.images.cave0001, 820-(camX/4%820), 0);
+            ctx.drawImage(res.images.cave0002, -(camX/2%820), 0);
+            ctx.drawImage(res.images.cave0002, 820-(camX/2%820), 0);
+        }
 
         if (level.caves) {
             for (let i = 0; i < 5; ++i) {
@@ -85,10 +96,9 @@ export class Renderer {
             ctx.drawImage(res.images.caves, level.caves[0] - camX, 480 + level.caves[1])
         }
 
-        ctx.fillStyle = '#00000d';
         level.grounds.forEach(g => {
             const r = g(state.frame);
-            drawJaggyRect(this.rng, ctx, r.xmin - camX, 480 + r.ymin, r.xmax - r.xmin, r.ymax - r.ymin, true);
+            drawJaggyRect(this.rng, ctx, r.xmin - camX, 480 + r.ymin, r.xmax - r.xmin, r.ymax - r.ymin, state.level === 0);
         });
 
         const animFrame = (res.images as any)['hero'+(state.player.walkAnimFrame.toString() as any).padStart(4,'0')];

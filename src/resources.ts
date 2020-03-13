@@ -9,6 +9,8 @@ const loadImage = (
 
 type Images = {
     caves: HTMLImageElement,
+    cave0001: HTMLImageElement,
+    cave0002: HTMLImageElement,
     forest0001: HTMLImageElement,
     forest0002: HTMLImageElement,
     friend: HTMLImageElement,
@@ -36,6 +38,8 @@ export type Resources = {
 
 export const loadResources = (): Promise<Resources> => new Promise(resolve => {
     Promise.all([
+        loadImage('res/cave0001.png'),
+        loadImage('res/cave0002.png'),
         loadImage('res/caves.png'),
         loadImage('res/forest0001.png'),
         loadImage('res/forest0002.png'),
@@ -58,6 +62,8 @@ export const loadResources = (): Promise<Resources> => new Promise(resolve => {
         loadImage('res/title.png'),
     ])
     .then(([
+        cave0001,
+        cave0002,
         caves,
         forest0001,
         forest0002,
@@ -81,6 +87,8 @@ export const loadResources = (): Promise<Resources> => new Promise(resolve => {
     ]) => {
         resolve({
             images: {
+                cave0001,
+                cave0002,
                 caves,
                 forest0001,
                 forest0002,
