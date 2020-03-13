@@ -12,6 +12,8 @@ export type GameState = {
     cavesDone: boolean[],
     rain: vec2[],
     rainAngle: number,
+    whiteFadeT: number,
+    blackFadeT: number,
 };
 
 type PlayerState = {
@@ -209,6 +211,8 @@ export const GameState = {
         cavesDone: [false,false,false,false,false],
         rain: Array(200).fill(0).map(_ => vec2.fromValues(800*Math.random(), 480*Math.random())),
         rainAngle: Math.PI / 16,
+        whiteFadeT: 0,
+        blackFadeT: 0,
     }),
 
     clone: (self: GameState): GameState => GameState.copy(GameState.create(), self),
@@ -227,6 +231,11 @@ export const GameState = {
                 vec2.lerp(out.rain[i], from.rain[i], to.rain[i], t);
             }
         });
+        if (from.whiteFadeT < to.whiteFadeT) {
+            out.whiteFadeT = to.whiteFadeT;
+        } else {
+            out.whiteFadeT = numberLerp(0, from.whiteFadeT, to.whiteFadeT, t);
+        }
         return out;
     },
 
@@ -240,8 +249,16 @@ export const GameState = {
         const newCamX = getCamX(self.level, self.player.pos[0]);
         const dx = newCamX - lastCamX;
 
+        if (self.whiteFadeT > 0) self.whiteFadeT -= 1 / 10;
+        if (self.whiteFadeT < 0) self.whiteFadeT = 0;
+
+        if (self.player.pos[1] > 150) {
+            GameState.copy(self, GameState.create());
+            self.whiteFadeT = 1;
+        }
+
         // Update rain
-        {
+        if (self.level === 0) {
             const SPEED = 15;
 
             self.rainAngle = dx/40 + Math.PI/16;

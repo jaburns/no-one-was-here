@@ -5,6 +5,8 @@ import { Resources } from "resources";
 import { PRNG } from "prng";
 import { vec2 } from "gl-matrix";
 
+const vec2_0 = vec2.create();
+
 const drawJaggyRect = (rng:PRNG, gfx:CanvasRenderingContext2D, x:number, y:number, w:number, h:number, forest:boolean) :void => {
     const STEP_SIZE :number = 15;
     const JAG_SIZE :number = 7;
@@ -34,6 +36,12 @@ const drawJaggyRect = (rng:PRNG, gfx:CanvasRenderingContext2D, x:number, y:numbe
     gfx.closePath();
     gfx.fill();
 }
+
+const friendStarPath = (out: vec2, t: number): vec2 => {
+    out[0] = 20 + 16* Math.sin(-t);
+    out[1] = 63 + 3 * Math.cos(-t) + 3*Math.sin(-t);
+    return out;
+};
 
 export const getCamX = (level: number, playerX: number): number =>
     Math.min(LEVELS[level].maxX-800, Math.max(0, playerX-400));
@@ -100,7 +108,21 @@ export class Renderer {
         }
 
         if (level.friend) {
-            ctx.drawImage(res.images.friend, level.friend[0] - camX, 480 + level.friend[1])
+            ctx.drawImage(res.images.friend, level.friend[0] - camX, 480 + level.friend[1]);
+
+            friendStarPath(vec2_0, 6.28*state.frame/120);
+            ctx.drawImage(res.images.star, level.friend[0] - camX + vec2_0[0] - 6, 480 + level.friend[1] + vec2_0[1] - 6);
+            friendStarPath(vec2_0, 6.28*state.frame/120 + 2*Math.PI/3);
+            ctx.drawImage(res.images.star, level.friend[0] - camX + vec2_0[0] - 6, 480 + level.friend[1] + vec2_0[1] - 6);
+            friendStarPath(vec2_0, 6.28*state.frame/120 + 4*Math.PI/3);
+            ctx.drawImage(res.images.star, level.friend[0] - camX + vec2_0[0] - 6, 480 + level.friend[1] + vec2_0[1] - 6);
+        }
+
+        if (state.whiteFadeT) {
+            ctx.fillStyle = '#fff';
+            ctx.globalAlpha = state.whiteFadeT * state.whiteFadeT;
+            ctx.fillRect(0, 0, 800, 480);
+            ctx.globalAlpha = 1;
         }
     }
 

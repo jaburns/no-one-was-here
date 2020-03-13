@@ -26,6 +26,7 @@ type Images = {
     hero0012: HTMLImageElement,
     hero0013: HTMLImageElement,
     rain: HTMLImageElement,
+    star: HTMLImageElement,
     title: HTMLImageElement,
 };
 
@@ -53,6 +54,7 @@ export const loadResources = (): Promise<Resources> => new Promise(resolve => {
         loadImage('res/hero0012.png'),
         loadImage('res/hero0013.png'),
         loadImage('res/rain.png'),
+        loadImage('res/star.png'),
         loadImage('res/title.png'),
     ])
     .then(([
@@ -74,6 +76,7 @@ export const loadResources = (): Promise<Resources> => new Promise(resolve => {
         hero0012,
         hero0013,
         rain,
+        star,
         title,
     ]) => {
         resolve({
@@ -96,6 +99,7 @@ export const loadResources = (): Promise<Resources> => new Promise(resolve => {
                 hero0012,
                 hero0013,
                 rain,
+                star,
                 title,
             }
         });
