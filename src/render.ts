@@ -4,6 +4,7 @@ import { LEVELS } from "levels";
 import { Resources } from "resources";
 import { PRNG } from "prng";
 import { vec2 } from "gl-matrix";
+import { drawDragon } from "dragon";
 
 const vec2_0 = vec2.create();
 
@@ -102,6 +103,10 @@ export class Renderer {
         });
 
         const animFrame = (res.images as any)['hero'+(state.player.walkAnimFrame.toString() as any).padStart(4,'0')];
+
+        if (level.dragon) {
+            drawDragon(ctx, level.dragon[0] - camX, 480 + level.dragon[1], state.frame);
+        }
 
         if (level.title) {
             ctx.drawImage(res.images.title, level.title[0] - camX, 480 + level.title[1])

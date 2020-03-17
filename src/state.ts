@@ -205,7 +205,7 @@ const PlayerState = {
 
 export const GameState = {
     create: (): GameState => ({
-        level: 0,
+        level: 1,
         player: PlayerState.create(),
         frame: 1,
         cavesDone: [false,false,false,false,false],

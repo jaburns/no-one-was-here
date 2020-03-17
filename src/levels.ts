@@ -57,6 +57,9 @@ const Level1 = {
         basic(494, -211, 362, 49),
         basic(714, -73, 1394, 171),
     ],
+
+    dragon: vec2.fromValues(1725, -239),
+    artifact: vec2.fromValues(1249, -200),
 };
 
 export const LEVELS: Level[] = [
