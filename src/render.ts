@@ -104,6 +104,10 @@ export class Renderer {
 
         const animFrame = (res.images as any)['hero'+(state.player.walkAnimFrame.toString() as any).padStart(4,'0')];
 
+        if (level.artifact) {
+            ctx.drawImage(res.images.hourglass, level.artifact[0] - camX - 18, 480 + level.artifact[1] - 18);
+        }
+
         if (level.dragon) {
             drawDragon(ctx, level.dragon[0] - camX, 480 + level.dragon[1], state.frame);
         }

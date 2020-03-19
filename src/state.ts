@@ -5,10 +5,13 @@ import { LEVELS } from "levels";
 import { Rect } from "rect";
 import { getCamX } from "render";
 
+// static private const DRAGON_DIST :Number = 550;
+
 export type GameState = {
     level: number,
     player: PlayerState,
     frame: number,
+    dragonWakingFrame: number,
     cavesDone: boolean[],
     rain: vec2[],
     rainAngle: number,
@@ -166,9 +169,12 @@ const PlayerState = {
 
         self.pos[1] += self.vel[1];
 
+        // collision size = 20 x 35
+
         lev.grounds.forEach(x => {
+            // Floor collision
             if (Rect.containsPoint(x(t), vec2.fromValues(self.pos[0] + 5, self.pos[1]))
-            || Rect.containsPoint(x(t), vec2.fromValues(self.pos[0] - 5, self.pos[1]))) {
+             || Rect.containsPoint(x(t), vec2.fromValues(self.pos[0] - 5, self.pos[1]))) {
                 self.pos[1] = x(t).ymin;
                 self.standing = true;
                 self.vel[1] = 0;
@@ -177,16 +183,29 @@ const PlayerState = {
                 self.platformVel[0] = x(t+1).xmin - x(t).xmin;
                 self.platformVel[1] = x(t+1).ymin - x(t).ymin;
             }
+
+            // Ceiling collision
+            if (Rect.containsPoint(x(t), vec2.fromValues(self.pos[0] + 5, self.pos[1] - 35))
+             || Rect.containsPoint(x(t), vec2.fromValues(self.pos[0] - 5, self.pos[1] - 35))) {
+                self.pos[1] = x(t).ymax + 35;
+                self.vel[1] = Math.max(0, x(t+1).ymin - x(t).ymin);
+                self.jumpStarted = false;
+            }
         });
 
         self.pos[0] += self.vel[0];
 
+        // Wall collisions
         lev.grounds.forEach(x => {
-            if (Rect.containsPoint(x(t), vec2.fromValues(self.pos[0] + 10, self.pos[1] - 5))) {
+            if (Rect.containsPoint(x(t), vec2.fromValues(self.pos[0] + 10, self.pos[1] - 5))
+            ||  Rect.containsPoint(x(t), vec2.fromValues(self.pos[0] + 10, self.pos[1] - 5))
+            ) {
                 self.pos[0] = x(t).xmin - 10;
                 self.vel[0] = 0;
             }
-            if (Rect.containsPoint(x(t), vec2.fromValues(self.pos[0] - 10, self.pos[1] - 5))) {
+            if (Rect.containsPoint(x(t), vec2.fromValues(self.pos[0] - 10, self.pos[1] - 30))
+            ||  Rect.containsPoint(x(t), vec2.fromValues(self.pos[0] - 10, self.pos[1] - 30))
+            ) {
                 self.pos[0] = x(t).xmax + 10
                 self.vel[0] = 0;
             }
@@ -208,6 +227,7 @@ export const GameState = {
         level: 1,
         player: PlayerState.create(),
         frame: 1,
+        dragonWakingFrame: 0,
         cavesDone: [false,false,false,false,false],
         rain: Array(200).fill(0).map(_ => vec2.fromValues(800*Math.random(), 480*Math.random())),
         rainAngle: Math.PI / 16,
