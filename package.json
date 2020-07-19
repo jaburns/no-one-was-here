@@ -11,7 +11,7 @@
     "awesome-typescript-loader": "5.2.1",
     "express": "4.17.1",
     "gl-matrix": "3.2.1",
-    "lodash": "4.17.15",
+    "lodash": "4.17.19",
     "shelljs": "0.8.3",
     "ts-essentials": "6.0.2",
     "typescript": "3.8.3",
